@@ -1,0 +1,43 @@
+# Readme
+Project #2-b for Data Structure and Algorithm for Electrical Engineering.
+For detailed homework instruction, please see instruction pdf.
+
+## Contributor
+20170504 Juan Lee (juanlee@kaist.ac.kr)
+
+## Implementations
+I strictly followed the instructions, comments, and answers uploaded on classum. I additionaly implemented single receiver and double receiver which use singly linked list and doubly linked list respectively.
+
+### Single Receiver
+Single Receiver simply uses singly linked list to sort and make output with unsorted packets. According to PDF and real network environment, messages are sent as form of divided packets, and they can be duplicated, loss, or out-or-ordered due to many reasons such as packet-switching, congestion control, etc. In order to make packets sort and recognize the loss of packet, I used insertion sort-like method in my receiver.  
+
+In insertion sort, insert data into proper position when data is come. Similarly, I put the data in proper position, in order of (message, packet). There could be some boundary conditions, and I handled all the conditions that I can think. Below is the conditions I handled:
+1. normal insert case - insert in the middle of linked list
+2. normal replace case - replace in the middle of linked list
+3. empty linked list - initial input
+4. insert at front
+5. replace at front
+6. insert at last
+7. replace at last
+In my algorithm, case 2 and 7 can be handled in the same way.
+
+After insertion, since the linked list is already sorted, I simply print out all the elements in order of linked list. The other code is only for the printing format.
+
+### Double Receiver
+Since doubly linked list can access to its previous node, I inserted new element into position which is relatively determined by previously inserted node. It means, not from the very first element, but from the previoulsy inserted node, find the position where to put new element and do insertion sort.  
+
+## Time Comparison
+For input file, input_large, time consumed for each case is:
+single_receiver: 60s
+double_receiver: 1s
+
+### Analysis
+In this case, there can be two extream scenarios:
+1. the distance between prev node and current node is far away
+2. position of current node is relatively close to previous node.
+
+However, if we assumed real network situation, we can say that case 2 is more frequent than case 1. So, double receiver is generally faster than single receiver.  
+Also, the input_large file is one typical case for case 2.
+
+## Reference & Helps
+KLMS, Classum, and Stackoverflow

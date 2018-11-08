@@ -1,0 +1,38 @@
+# Readme
+Project #2-c for Data Structure and Algorithm for Electrical Engineering.
+For detailed homework instruction, please see instruction pdf.
+
+## Contributor
+20170504 Juan Lee (juanlee@kaist.ac.kr)
+
+## Implementations
+I strictly followed the instructions, comments, and answers uploaded on classum. I implement the iterator for double receiver based on the code of doubly linked list implemented on 2-a.
+
+### Receiver Implementation
+Receiver code uses exactly same code for insertion of packets with 2-b. However, instead of traversing all the sorted linked list, it simply uses find function from C++ STL. The iterator used in find function is defined and explained below.
+
+### Header
+Header, double_list_iter.h, describes the interface of iterator, which has overloaded operators, ++, --, ==, !=, and *. == and != are defined for both Iter and integer value.  
+
+### Source Code
+Source code provides the implementations for the iterator. Belows are the operators and explanations.
+
+1. operator ++
+++ operation for iterator increments the position of the iterator, which makes the iterator point to the next of current position.
+
+2. operator --
+-- operation for iterator decrements the position of the iterator, which makes the iterator point to the previous position.
+
+3. operator == / != for Iter
+== and != operator for iterator compare and contrast the node pointers. 
+
+4. operator == / != for integer value
+== and != operator for iterator compare and contrast the data1 since this assignment only refers to the first data.
+
+5. operator *
+* operator refers the data1 since this assignment only referes to the first data.
+
+Also, begin and end functions for doubly linked list iterator returns the front element and tail respectively.
+
+## Reference & Helps
+KLMS, Classum, and Stackoverflow

@@ -1,0 +1,18 @@
+# Readme
+Project #2-a for Data Structure and Algorithm for Electrical Engineering.
+For detailed homework instruction, please see instruction pdf.
+
+## Contributor
+20170504 Juan Lee (juanlee@kaist.ac.kr)
+
+## Implementations
+I strictly followed the instructions, comments, and answers uploaded on classum. I implemented two linked lists, one for singly linked list, and the other for doubly linked list.
+
+### Singly Linked List
+Singly Linked List has a head pointer to indicate where the head of linked list is. This is the only pointer pointing the element in singly linked list, so the methods iterate all the elements from this head pointer. As instruction pdf mentioned, Head is a pointer of the first real element.
+
+### Doubly Linked List
+Doubly Linked List has two head and tail pointers, which are not read elements. So, in case of initial state, head is directly pointing to tail as next, and tail is directly pointing to head as prev. Instead of head and tail, front and back indicates first and last real elements. 
+
+## Reference & Helps
+KLMS, Classum, and Stackoverflow

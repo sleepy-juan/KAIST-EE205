@@ -1,0 +1,87 @@
+EE205 Project 3 를 위한 JTest!
+- 이상한 점이 있을 경우 이주안(juanlee@kaist.ac.kr) 에게!
+- 저를 안다면야 카톡이나 문자 같은것도 괜찮아요~
+- 프로그램 배포는 마음대로!
+
+지금은 우선 avl 까지 밖에 구현이 안되있는 상황입니당.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+아래는 컴파일 하는 방법:
+
+1. jtest.cpp 를 연다.
+2. 코드 윗쪽에 주석으로 박스가 되어 있는 부분을 찾는다.
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//   YOU SHOULD CHANGE BELOW                                                  //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+#include "linked_list.h"
+// your linked_list header
+// #include "YOUR_LINKED_LIST.h"
+
+typedef LinkedList LinkedList;
+// your linked_list class
+// DO NOT modify second 'LinkedList'
+// typedef YOUR_LINKED_LIST_CLASS LinkedList
+
+////////////////////////////////////////////////////////////////////////////////
+
+3. 위 코드를 알맞게 바꾼다.
+가령, double_list 라는 클래스가 double_list.h 에 있다면!
+
+////////////////////////////////////////////////////////////////////////////////
+//                                                                            //
+//   YOU SHOULD CHANGE BELOW                                                  //
+//                                                                            //
+////////////////////////////////////////////////////////////////////////////////
+
+#include “double_list.h”
+// your linked_list header
+// #include "YOUR_LINKED_LIST.h"
+
+typedef double_list LinkedList;
+// your linked_list class
+// DO NOT modify second 'LinkedList'
+// typedef YOUR_LINKED_LIST_CLASS LinkedList
+
+////////////////////////////////////////////////////////////////////////////////
+
+4. makefile을 열고 linked_list.cpp 부분을 찾는다.
+
+linked_list.o: linked_list.cpp
+	g++ -c -o linked_list.o linked_list.cpp
+
+5. Linked list 코드를 알맞게 바꾼다.
+가령, double_list.cpp 라면!
+
+linked_list.o: double_list.cpp
+	g++ -c -o linked_list.o double_list.cpp
+
+6. make 실행!
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+아래는 실행 하는 방법:
+
+./jtest -all
+	: avl과 yimacs 둘다 테스트
+
+./jtest -avl
+	: avl만 테스트
+
+./jtest -yavl
+	: yimacs만 테스트
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+아래는 주의할 점:
+
+1. yimacs는 생각보다 깐깐하게 본답니다ㅠㅜ 이 테스트가 통과하지 못해도 과제 요구사항은 다 통과한 것일 수도 있어요!
+	1) avl_tree 각 node의 linked_list 에는 항상 increasing order로 저장했다고 가정합니다.
+	2) 화면에 출력되는 코드는 항상 input 파일의 line 순서대로 출력된다고 가정합니다.
+	3) < ~~ 후에는 \n 하나, > ~~ 후에는 \n 두개가 있다고 가정합니다.
+	4) word를 whitespace로 둘러쌓인 것으로 엄밀히! 봅니다. 즉, ' ', '\t', '\n', '\r', '\f', '\v' 를 모두 확인합니다.
+2. Linked List는 따로 보지 않습니다! 알아서 확인하기!
+3. avl tree도 output 양식을 깐깐하게 봅니다ㅠㅜ
+	1) root: key\n --> key 뒤에 공백이 없어요!
+	2) "key1 key2 key3 " --> 마지막 key 뒤에 ' '가 하나 있어요!
