@@ -1,6 +1,6 @@
 /*
 * Skeleton code for project 3 in EE205 2018 Fall KAIST
-* Created by Yoonpyo Koo
+* Created by Wan Ju Kang.
 *
 */
 
@@ -12,13 +12,13 @@
 #include <iostream>
 #include <string>
 #include <regex>
-#include "avl_tree.h"
+#include "rb_tree.h"
 /* Include more if you need */
 #include "linked_list.h"
 
 using namespace std;
 
-/* Use these functions to replace words in a string. 
+/* Use these functions to replace words in a string.
 * Make sure you add -std=c++11 option when you compile.
 */
 void replace_all(string& str, const string& from, const string& to) {
@@ -26,19 +26,19 @@ void replace_all(string& str, const string& from, const string& to) {
 	string whitespaces[] = {" ", "\t", "\n", "\f", "\r", "\v"};
 
 	for(string white: whitespaces){
-		std::regex reg1("^" + from + white);
+		std::regex reg1("^" + from + white, std::regex_constants::icase);
 	    str = string(std::regex_replace(str, reg1, to + white));
 
-	    std::regex reg2(white + from + "$");
+	    std::regex reg2(white + from + "$", std::regex_constants::icase);
 	    str = string(std::regex_replace(str, reg2, white + to));
 
 	    for(string another: whitespaces){
-	    	std::regex reg3(white + from + another);
+	    	std::regex reg3(white + from + another, std::regex_constants::icase);
 	    	str = string(std::regex_replace(str, reg3, white + to + another));
 	    	str = string(std::regex_replace(str, reg3, white + to + another));
 		}
 	}
-	std::regex reg4("^" + from + "$");
+	std::regex reg4("^" + from + "$", std::regex_constants::icase);
 	str = string(std::regex_replace(str, reg4, to));
 }
 
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	ofstream output(argv[2]);
 
 	/* variables */
-	AVLTree<LinkedList> tree;
+	RBTree<LinkedList> tree;
 	LinkedList list;
 
 	/* read lines from file */
@@ -66,7 +66,10 @@ int main(int argc, char* argv[])
 			stringstream ss(line);
 			string word;
 			while(ss>>word){
+				// store as lower case for case insensitive
+				std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 				tree.insert(word);
+
 				LinkedList* words_list = tree.search(word)->value;
 				if(words_list->empty())
 					words_list->insertBack(new Element(list.length() - 1));
@@ -78,6 +81,7 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
+	input.close();
 
 	// handle commands
 	string line;
@@ -88,8 +92,19 @@ int main(int argc, char* argv[])
 		ss>>command>>from>>to;
 
 		if(command == "R"){
-			AVLNode<LinkedList> *node_from = tree.search(from);
-			AVLNode<LinkedList> *node_to = tree.search(to);
+			string lower_from = from;
+			string lower_to = to;
+			// for case insensitive
+			std::transform(lower_from.begin(), lower_from.end(), lower_from.begin(), ::tolower);
+			std::transform(lower_to.begin(), lower_to.end(), lower_to.begin(), ::tolower);
+
+			RBNode<LinkedList> *node_from = tree.search(lower_from);
+			RBNode<LinkedList> *node_to = tree.search(lower_to);
+
+			if(tree.is_external(node_to)){
+				tree.insert(lower_to);
+				node_to = tree.search(lower_to);
+			}
 
 			LinkedList* words_from = node_from->value;
 			LinkedList*	words_to = node_to->value;
@@ -105,28 +120,31 @@ int main(int argc, char* argv[])
 				cout<<"> "<<str_line<<endl<<endl;
 				list.replace(line_from, new Element(str_line));
 
-				// replace tree
-				if(words_to->empty() || words_to->getIntValueOf(words_to->back()) < num){
-					words_to->insertBack(new Element(num));
-				}
-				else{
-					Element* front = words_to->front();
-					while(front != words_to->tail()){
-						int value = words_to->getIntValueOf(front);
+				if(lower_from != lower_to){
+					// replace tree
+					if(words_to->empty() || words_to->getIntValueOf(words_to->back()) < num){
+						words_to->insertBack(new Element(num));
+					}
+					else{
+						Element* front = words_to->front();
+						while(front != words_to->tail()){
+							int value = words_to->getIntValueOf(front);
 
-						if(value == num) break;
-						else if(value > num){
-							words_to->insertBefore(front, new Element(num));
-							break;
+							if(value == num) break;
+							else if(value > num){
+								words_to->insertBefore(front, new Element(num));
+								break;
+							}
+							else
+								front = words_to->getNextOf(front);
 						}
-						else
-							front = words_to->getNextOf(front);
 					}
 				}
 			}
 
 			// remove node
-			tree.remove(from);
+			if(lower_from != lower_to)
+				tree.remove(lower_from);
 		}
 
 		getline(cin, line);
@@ -139,5 +157,6 @@ int main(int argc, char* argv[])
 			output<<endl;
 	}
 
+	output.close();
 	return 0;
 }

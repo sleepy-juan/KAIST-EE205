@@ -38,6 +38,10 @@ public:
 		height = 0;
 	}
 
+	~AVLNode(){
+		if(value != NULL)
+			delete value;
+	}
 };
 
 
@@ -45,6 +49,7 @@ template <class T>
 class AVLTree {
 public:
 	AVLTree();
+	~AVLTree();
 	void display();
 
 	bool insert(string key);
@@ -65,12 +70,19 @@ private:
 
 	void inorder_print(AVLNode<T> *n);
 	void preorder_print(AVLNode<T> *n);
-
 };
 
 template <class T>
 AVLTree<T>::AVLTree() {
 	root = new AVLNode<T>("", NULL);
+}
+
+template <class T>
+AVLTree<T>::~AVLTree() {
+	while(!is_external(root)){
+		remove(root->key);
+	}
+	delete root;
 }
 
 template <class T>

@@ -236,21 +236,13 @@ bool AVLTree<T>::insert(string key) {
 
 template <class T>
 void cleanUpNode(AVLNode<T>* node){
-	if(node != NULL){
-		if(node->leftChild != NULL){
-			if(node->leftChild->value != NULL)
-				delete node->leftChild->value;
-			delete node->leftChild;
-		}	
-		if(node->rightChild != NULL){
-			if(node->rightChild->value != NULL)
-				delete node->rightChild->value;
-			delete node->rightChild;
-		}
-		if(node->value != NULL)
-			delete node->value;
-		delete node;
-	}
+	if(node == NULL) return;
+
+	if(node->leftChild != NULL)
+		delete node->leftChild;
+	if(node->rightChild != NULL)
+		delete node->rightChild;
+	delete node;
 }
 
 /* 
@@ -263,9 +255,32 @@ bool AVLTree<T>::remove(string key) {
 	AVLNode<T> *n = search(key);
 	if(is_external(n)) return false;
 
-	// if node has no right children
-	if(is_external(n->rightChild)){
-		if(is_root(n)){	// n is root
+	if(!is_external(n->leftChild) && !is_external(n->rightChild)){
+		AVLNode<T> *to_be_changed = n->rightChild;
+		while(!is_external(to_be_changed->leftChild))
+			to_be_changed = to_be_changed->leftChild;
+
+		to_be_changed->rightChild->parent = to_be_changed->parent;
+		if(to_be_changed->parent->leftChild == to_be_changed){
+			to_be_changed->parent->leftChild = to_be_changed->rightChild;
+		}
+		else{
+			to_be_changed->parent->rightChild = to_be_changed->rightChild;
+		}
+
+		balance(to_be_changed->parent);
+
+		n->key = to_be_changed->key;
+		delete n->value;
+		n->value = to_be_changed->value;
+		to_be_changed->value = NULL;
+		to_be_changed->rightChild = NULL;
+		cleanUpNode(to_be_changed);
+
+		return true;
+	}
+	else if(!is_external(n->leftChild) && is_external(n->rightChild)){
+		if(is_root(n)){
 			root = n->leftChild;
 			root->parent = NULL;
 		}
@@ -277,30 +292,31 @@ bool AVLTree<T>::remove(string key) {
 				n->parent->rightChild = n->leftChild;
 		}
 
+		balance(n->parent);
+
 		n->leftChild = NULL;
 		cleanUpNode(n);
 		return true;
 	}
+	else{
+		if(is_root(n)){
+			root = n->rightChild;
+			root->parent = NULL;
+		}
+		else{
+			n->rightChild->parent = n->parent;
+			if(n->parent->leftChild == n)
+				n->parent->leftChild = n->rightChild;
+			else
+				n->parent->rightChild = n->rightChild;
+		}
 
-	// find node to exchange
-	AVLNode<T> *r = n->rightChild;
-	while(!is_external(r)) r = r->leftChild;
-	r = r->parent;
+		balance(n->parent);
 
-	// disconnect
-	if(r->parent->leftChild == r)
-		r->parent->leftChild = new AVLNode<T>("", r->parent);
-	else
-		r->parent->rightChild = new AVLNode<T>("", r->parent);
-
-	// exchange
-	n->key = r->key;
-	delete n->value;
-	n->value = r->value;
-	r->value = NULL;
-	cleanUpNode(r);
-
-	return true;
+		n->rightChild = NULL;
+		cleanUpNode(n);
+		return true;
+	}
 }
 
 /* 
