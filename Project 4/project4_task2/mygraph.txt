@@ -1,0 +1,18 @@
+Node
+A
+B
+C
+D
+E
+F
+
+Edge
+A B 8
+A C 2
+A D 4
+B C 7
+B E 2
+C E 3
+C D 1
+C F 9
+D F 5

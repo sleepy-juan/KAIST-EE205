@@ -1,0 +1,41 @@
+# [EE205] Data Structures and Algorithms for Electrical Engineering
+
+# Author
+Juan Lee, juanlee@kaist.ac.kr
+
+# Project Info
+This is a forth project of EE205, which is about Graph ADT, Kruskal algorithm, and Dijkstra Algorithm.
+
+## Task 1 - Graph ADT
+I thoroughly followed comments on each function to implement the requirements in Task 1.
+I DID NOT change any form of header, or functions.
+
+For ADT_Graph<T>::vertices,
+although PDF says it returns all the vertices of graph, but
+    1) it returns an integer number which is also returned for indicating successful result in other methods
+    2) main.cpp uses it as printing function (run without cout)
+    3) there is another function returning vertices
+Thus, I simply prints the vertices out by calling ADT_Nodelist<T>::print_all_vertices.
+
+For ADT_Graph<T>::edges,
+Same as ADT_Graph<T>::vertices, I simply prints the edges out by calling ADT_Edgelist<T>::print_all_edges.
+
+## Task 2 - MST
+I followed your recommendation and instructions, so I used Kruskal algorithm for this task.
+This is implmeneted in findMST function.
+
+However, for simple implementation, I did not make a Union-Find data structure with partitioning, but used a cluster ID indicating same clusters.
+This is managed by clusters map, which contains (key, cluster_ID).
+This is exactly why my Kruskal's time complexity does not make the best result. ( O((n+m)logn) )
+(I used STL priority queue for stroing and managing edges)
+
+## Task 2 - Shortest Path
+I followed your recommendation and instructions, so I used Dijkstra algorithm for this task.
+This is implemented in findShortestPath function, which calls sub-function for each (source, destination) pair.
+
+However, for simple implementation, I did not make a priority queue for nodes.
+Priority queue was not difficult, but STL priority queue does not support after-inserting-update of the value.
+Also, this is exactly why my Dijkstra algorithm deos not make best result. ( O(n+m) )
+
+# Helps
+I referenced C++ STL manuals from Google
